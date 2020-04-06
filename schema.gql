@@ -1,0 +1,22 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Activity {
+  id: ID!
+  title: String!
+}
+
+type Mutation {
+  addActivity(newActivityData: NewActivityInput!): Activity!
+  removeActivity(id: String!): Boolean!
+}
+
+input NewActivityInput {
+  title: String!
+}
+
+type Query {
+  activity(id: String!): Activity!
+  activities(skip: Int = 0, take: Int = 25): [Activity!]!
+}
