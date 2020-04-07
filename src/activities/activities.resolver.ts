@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { NewActivityInput } from './dto/new-activity.input';
 import { ActivitiesArgs } from './dto/activities.args';
-import { Activity } from './activity.model';
+import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
 
 @Resolver(of => Activity)

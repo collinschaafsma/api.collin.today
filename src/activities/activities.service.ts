@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { NewActivityInput } from './dto/new-activity.input';
 import { ActivitiesArgs } from './dto/activities.args';
-import { Activity } from './activity.model';
+import { Activity } from './activity.entity';
 
 @Injectable()
 export class ActivitiesService {

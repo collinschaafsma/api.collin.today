@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:11.6
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: "${DB_USERNAME}_${APP_ENV}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
+
+volumes:
+  postgres:
