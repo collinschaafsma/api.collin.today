@@ -6,6 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "db:create": "./src/script/db.ts",
+    "db:drop": "./src/script/db.ts drop",
+    "db:migrate": "yarn typeorm migration:run",
+    "db:undo": "yarn typeorm migration:revert",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
