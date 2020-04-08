@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "db:create": "./src/script/db.ts",
-    "db:drop": "./src/script/db.ts drop",
+    "db:create": "./src/scripts/db.ts",
+    "db:drop": "./src/scripts/db.ts drop",
     "db:migrate": "yarn typeorm migration:run",
     "db:undo": "yarn typeorm migration:revert",
     "prebuild": "rimraf dist",
