@@ -14,7 +14,7 @@ export class ActivitiesService {
     return {} as any;
   }
 
-  async findAll(recipesArgs: ActivitiesArgs): Promise<Activity[]> {
+  async findAll(activitiesArgs: ActivitiesArgs): Promise<Activity[]> {
     return [] as Activity[];
   }
 

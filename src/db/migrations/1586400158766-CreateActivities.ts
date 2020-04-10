@@ -3,6 +3,10 @@ import {MigrationInterface, QueryRunner, Table} from "typeorm";
 export class CreateActivities1586400158766 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
+    await queryRunner.query(
+      `CREATE TYPE "activity_type_enum" AS ENUM('STRAVA', 'GYM', 'OTHER')`,
+    );
+    
     await queryRunner.createTable(
       new Table({
         name: 'activities',
@@ -22,6 +26,11 @@ export class CreateActivities1586400158766 implements MigrationInterface {
             name: 'description',
             type: 'varchar',
             isNullable: true,
+          },
+          {
+            name: 'type',
+            type: 'activity_type_enum',
+            isNullable: false,
           },
           {
             name: 'publishAt',

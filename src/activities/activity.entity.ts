@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   IsUUID,
   IsOptional,
+  IsEnum,
   IsNotEmpty,
   IsString,
   IsDateString,
@@ -16,6 +17,7 @@ import {
 } from 'typeorm';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { UUID } from '../types/global';
+import { ActivityType } from './dto/activities.types';
 
 const { UPDATE } = CrudValidationGroups;
 
@@ -40,9 +42,19 @@ export class Activity {
   @MinLength(1, { groups: [UPDATE] })
   @Index()
   @Column('varchar')
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  public description!: string;
+  public description?: string;
+
+  @IsOptional({ groups: [UPDATE] })
+  @Column({
+    type: 'enum',
+    enum: ActivityType,
+    default: ActivityType.OTHER,
+  })
+  @Field()
+  @IsEnum(ActivityType)
+  public type!: ActivityType;
 
   @Field()
   @IsNotEmpty()
