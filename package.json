@@ -31,7 +31,6 @@
     "@nestjs/graphql": "^7.2.1",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/typeorm": "^7.0.0",
-    "@nestjsx/crud": "^4.4.2",
     "apollo-server-express": "^2.11.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
