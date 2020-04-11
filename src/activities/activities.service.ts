@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import { NewActivityInput } from './dto/new-activity.input';
-import { ActivitiesArgs } from './dto/activities.args';
 import { Activity } from './activity.entity';
+import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ActivitiesService {
@@ -20,11 +20,14 @@ export class ActivitiesService {
     return await this.activitiesRepository.findOne(id);
   }
 
-  async findAll(activitiesArgs: ActivitiesArgs): Promise<Activity[]> {
-    return await this.activitiesRepository.find();
+  async findAll(options: IPaginationOptions): Promise<Pagination<Activity>> {
+    const qb = this.activitiesRepository.createQueryBuilder('activity');
+    qb.orderBy('activity.publishAt', 'DESC');
+
+    return paginate<Activity>(qb, options);
   }
 
-  async remove(id: string): Promise<void> {
-    await this.activitiesRepository.delete(id);
+  async remove(id: string): Promise<DeleteResult> {
+    return await this.activitiesRepository.delete(id);
   }
 }
