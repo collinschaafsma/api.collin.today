@@ -18,8 +18,8 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
-  addActivity(newActivityData: NewActivityInput!): Activity!
-  removeActivity(id: String!): Boolean!
+  createActivity(newActivityData: NewActivityInput!): Activity!
+  deleteActivity(id: String!): Boolean!
 }
 
 input NewActivityInput {
@@ -31,5 +31,5 @@ input NewActivityInput {
 
 type Query {
   activity(id: String!): Activity!
-  activities(limit: Int = 25): [Activity!]!
+  activities(limit: Float!, page: Float!): [Activity!]!
 }

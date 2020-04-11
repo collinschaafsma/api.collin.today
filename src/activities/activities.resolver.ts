@@ -1,9 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { NewActivityInput } from './dto/new-activity.input';
-import { ActivitiesArgs } from './dto/activities.args';
 import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
+import { Pagination } from 'nestjs-typeorm-paginate';
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 
 @Resolver(of => Activity)
 export class ActivitiesResolver {
@@ -19,20 +22,23 @@ export class ActivitiesResolver {
   }
 
   @Query(returns => [Activity])
-  activities(@Args() activitiesArgs: ActivitiesArgs): Promise<Activity[]> {
-    return this.activitiesService.findAll(activitiesArgs);
+  async activities(
+    @Args('page') page: number = 1, 
+    @Args('limit') limit: number = 10,
+  ): Promise<Pagination<Activity>> {
+    return await this.activitiesService.findAll({
+      page,
+      limit
+    });
   }
 
   @Mutation(returns => Activity)
-  async addActivity(
-    @Args('newActivityData') newActivityData: NewActivityInput,
-  ): Promise<Activity> {
-    const activity = await this.activitiesService.create(newActivityData);
-    return activity;
+  async createActivity(@Args('newActivityData') newActivityData: NewActivityInput): Promise<Activity> {
+    return await this.activitiesService.create(newActivityData);
   }
 
   @Mutation(returns => Boolean)
-  async removeActivity(@Args('id') id: string) {
-    return this.activitiesService.remove(id);
+  async deleteActivity(@Args('id') id: string) {
+    return this.activitiesService.delete(id);
   }
 }
