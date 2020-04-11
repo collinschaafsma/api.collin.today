@@ -1,52 +1,38 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   IsUUID,
-  IsOptional,
   IsEnum,
   IsNotEmpty,
   IsString,
   IsDateString,
-  MinLength,
 } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Index,
 } from 'typeorm';
-import { CrudValidationGroups } from '@nestjsx/crud';
 import { UUID } from '../types/global';
 import { ActivityType } from './dto/activities.types';
 
-const { UPDATE } = CrudValidationGroups;
-
 @ObjectType()
 export class Activity {
-  @IsUUID()
-  @Field(/* istanbul ignore next */ (_type) => ID)
   @PrimaryGeneratedColumn('uuid')
-  @IsNotEmpty()
+  @Field(/* istanbul ignore next */ (_type) => ID)  
+  @IsUUID()
   public id!: UUID;
 
-  @IsOptional({ groups: [UPDATE] })
-  @MinLength(1, { groups: [UPDATE] })
-  @Index()
-  @Column('varchar')
+  @Column()
   @Field()
   @IsNotEmpty()
   @IsString()
   public title!: string;
 
-  @IsOptional({ groups: [UPDATE] })
-  @MinLength(1, { groups: [UPDATE] })
-  @Index()
-  @Column('varchar')
+  @Column()
   @Field({ nullable: true })
   @IsString()
   public description?: string;
 
-  @IsOptional({ groups: [UPDATE] })
   @Column({
     type: 'enum',
     enum: ActivityType,
@@ -56,19 +42,20 @@ export class Activity {
   @IsEnum(ActivityType)
   public type!: ActivityType;
 
+  @Column('timestamp')
   @Field()
   @IsNotEmpty()
   @IsDateString()
   public publishAt!: Date;
 
-  @Field()
   @CreateDateColumn()
+  @Field()
   @IsNotEmpty()
   @IsDateString()
   public createdAt!: Date;
 
-  @Field()
   @UpdateDateColumn()
+  @Field()
   @IsNotEmpty()
   @IsDateString()
   public updatedAt!: Date;
