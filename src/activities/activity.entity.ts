@@ -11,11 +11,13 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Entity
 } from 'typeorm';
 import { UUID } from '../types/global';
 import { ActivityType } from './dto/activities.types';
 
 @ObjectType()
+@Entity({ name: 'activities' })
 export class Activity {
   @PrimaryGeneratedColumn('uuid')
   @Field(/* istanbul ignore next */ (_type) => ID)  
