@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
+import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { NewActivityInput } from './dto/new-activity.input';
 import { Activity } from './activity.entity';
 import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-paginate';
@@ -13,7 +13,13 @@ export class ActivitiesService {
   ) {}
 
   async create(data: NewActivityInput): Promise<Activity> {
-    return {} as any;
+    return await this.activitiesRepository.save(
+      this.activitiesRepository.create(data)
+    );
+  }
+
+  async update(activity: Activity): Promise<UpdateResult> {
+    return await this.activitiesRepository.update(activity.id, activity);
   }
 
   async findOneById(id: string): Promise<Activity> {
@@ -27,7 +33,7 @@ export class ActivitiesService {
     return paginate<Activity>(qb, options);
   }
 
-  async remove(id: string): Promise<DeleteResult> {
+  async delete(id: string): Promise<DeleteResult> {
     return await this.activitiesRepository.delete(id);
   }
 }

@@ -23,7 +23,7 @@ export class NewActivityInput {
 
   @Field()
   @IsEnum(ActivityType)
-  public type!: string;
+  public type!: ActivityType;
 
   @Field()
   @IsNotEmpty()
