@@ -27,6 +27,5 @@ export class NewActivityInput {
 
   @Field()
   @IsNotEmpty()
-  @IsDateString()
   public publishAt!: Date;
 }
