@@ -1,24 +1,22 @@
-import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
+import { ConfigService } from '@nestjs/config';
 
-dotenv.config();
-
+const configService = new ConfigService();
 
 const logging: LoggerOptions =
-  process.env.APP_ENV === 'production'
+  configService.get<string>('APP_ENV') === 'production'
     ? ['error']
     : ['error', 'query', 'schema'];
 
 // Check typeORM documentation for more information.
 const config: ConnectionOptions = {
   type: 'postgres',
-
-  host: process.env.DB_HOSTNAME || 'localhost',
-  port: +process.env.DB_PORT || 5432,
-  username: process.env.DB_USERNAME || 'collintoday',
-  password: process.env.DB_PASSWORD || 'collintoday',
-  database: process.env.DB_NAME || 'collintoday_development',
+  host: configService.get<string>('DB_HOSTNAME', 'localhost'),
+  port: configService.get<number>('DB_PORT', 5432),
+  username: configService.get<string>('DB_USERNAME', 'collintoday'),
+  password: configService.get<string>('DB_PASSWORD', 'collintoday'),
+  database: configService.get<string>('DB_NAME', 'collintoday_development'),
 
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
 
