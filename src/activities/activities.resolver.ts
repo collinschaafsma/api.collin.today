@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { NewActivityInput } from './dto/new-activity.input';
+import { ActivityCreateInput } from './dto/activity.create.input';
+import { ActivityUpdateInput } from './dto/activity.update.input';
 import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
 
@@ -29,9 +30,17 @@ export class ActivitiesResolver {
   }
 
   @Mutation(returns => Activity)
-  async createActivity(@Args('newActivityData') newActivityData: NewActivityInput): Promise<Activity> {
-    return await this.activitiesService.create(newActivityData);
+  async createActivity(@Args('activityCreateInput') activityCreateInput: ActivityCreateInput): Promise<Activity> {
+    return await this.activitiesService.create(activityCreateInput);
   }
+
+  @Mutation(returns => Activity)
+  async updateActivity(
+    @Args('id') id: string,
+    @Args('activityUpdateInput') activityUpdateInput: ActivityUpdateInput
+  ): Promise<Activity> {
+    return await this.activitiesService.update(id, activityUpdateInput);
+  }  
 
   @Mutation(returns => Boolean)
   async deleteActivity(@Args('id') id: string) {

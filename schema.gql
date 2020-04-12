@@ -12,21 +12,29 @@ type Activity {
   updatedAt: DateTime!
 }
 
+input ActivityCreateInput {
+  title: String!
+  description: String
+  type: String!
+  publishAt: DateTime!
+}
+
+input ActivityUpdateInput {
+  title: String
+  description: String
+  type: String
+  publishAt: DateTime
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
 type Mutation {
-  createActivity(newActivityData: NewActivityInput!): Activity!
+  createActivity(activityCreateInput: ActivityCreateInput!): Activity!
+  updateActivity(activityUpdateInput: ActivityUpdateInput!, id: String!): Activity!
   deleteActivity(id: String!): Boolean!
-}
-
-input NewActivityInput {
-  title: String!
-  description: String
-  type: String!
-  publishAt: DateTime!
 }
 
 type Query {

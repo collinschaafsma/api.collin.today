@@ -4,28 +4,29 @@ import {
   MaxLength, 
   IsString,
   IsNotEmpty,
-  IsDateString,
   IsEnum
 } from 'class-validator';
 
 import { ActivityType } from './activities.types';
 
 @InputType()
-export class NewActivityInput {
-  @Field()
+export class ActivityUpdateInput {
+  @Field({ nullable: true })
+  @IsOptional()
   @MaxLength(30)
-  public title!: string;
+  public title?: string;
 
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   public description?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsEnum(ActivityType)
-  public type!: ActivityType;
+  public type?: ActivityType;
 
-  @Field()
-  @IsNotEmpty()
-  public publishAt!: Date;
+  @Field({ nullable: true })
+  @IsOptional()
+  public publishAt?: Date;
 }

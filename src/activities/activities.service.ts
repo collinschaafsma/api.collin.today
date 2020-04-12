@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult, UpdateResult } from 'typeorm';
-import { NewActivityInput } from './dto/new-activity.input';
+import { Repository, DeleteResult } from 'typeorm';
+import { ActivityCreateInput } from './dto/activity.create.input';
 import { Activity } from './activity.entity';
+import { ActivityUpdateInput } from './dto/activity.update.input';
 
 @Injectable()
 export class ActivitiesService {
@@ -11,14 +12,17 @@ export class ActivitiesService {
     private activitiesRepository: Repository<Activity>,
   ) {}
 
-  async create(data: NewActivityInput): Promise<Activity> {
+  async create(data: ActivityCreateInput): Promise<Activity> {
     return await this.activitiesRepository.save(
       this.activitiesRepository.create(data)
     );
   }
 
-  async update(activity: Activity): Promise<UpdateResult> {
-    return await this.activitiesRepository.update(activity.id, activity);
+  async update(id: string, data: ActivityUpdateInput): Promise<Activity> {
+    const activityToUpdate = await this.activitiesRepository.findOneOrFail(id);
+    const activityUpdated = Object.assign(activityToUpdate, data);
+    
+    return await this.activitiesRepository.save(activityUpdated);
   }
 
   async findOneById(id: string): Promise<Activity> {
