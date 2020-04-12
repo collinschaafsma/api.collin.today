@@ -3,7 +3,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { NewActivityInput } from './dto/new-activity.input';
 import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
-import { Pagination } from 'nestjs-typeorm-paginate';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -23,13 +22,10 @@ export class ActivitiesResolver {
 
   @Query(returns => [Activity])
   async activities(
-    @Args('page') page: number = 1, 
-    @Args('limit') limit: number = 10,
-  ): Promise<Pagination<Activity>> {
-    return await this.activitiesService.findAll({
-      page,
-      limit
-    });
+    @Args('page', { nullable: true, defaultValue: 1 }) page?: number,
+    @Args('limit', { nullable: true, defaultValue: 30}) limit?: number
+  ): Promise<Activity[]> {
+    return await this.activitiesService.findAll(page, limit);
   }
 
   @Mutation(returns => Activity)

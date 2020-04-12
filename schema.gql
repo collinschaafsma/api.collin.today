@@ -31,5 +31,5 @@ input NewActivityInput {
 
 type Query {
   activity(id: String!): Activity!
-  activities(limit: Float!, page: Float!): [Activity!]!
+  activities(limit: Float = 30, page: Float = 1): [Activity!]!
 }

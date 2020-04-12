@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { NewActivityInput } from './dto/new-activity.input';
 import { Activity } from './activity.entity';
-import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ActivitiesService {
@@ -26,11 +25,14 @@ export class ActivitiesService {
     return await this.activitiesRepository.findOne(id);
   }
 
-  async findAll(options: IPaginationOptions): Promise<Pagination<Activity>> {
-    const qb = this.activitiesRepository.createQueryBuilder('activity');
-    qb.orderBy('activity.publishAt', 'DESC');
-
-    return paginate<Activity>(qb, options);
+  async findAll(page = 1, limit = 30) {
+    return await this.activitiesRepository.find({
+      take: limit,
+      skip: limit * (page - 1),
+      order: {
+        publishAt: "DESC"
+      }
+    });
   }
 
   async delete(id: string): Promise<DeleteResult> {
