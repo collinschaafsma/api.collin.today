@@ -12,11 +12,14 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     ActivitiesModule,
     TypeOrmModule.forRoot(ormconfig),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
+      context: ({ req }) => ({ req }),
     }),
     AuthModule,
     UsersModule,
