@@ -35,9 +35,28 @@ type Mutation {
   createActivity(activityCreateInput: ActivityCreateInput!): Activity!
   updateActivity(activityUpdateInput: ActivityUpdateInput!, id: String!): Activity!
   deleteActivity(id: String!): Boolean!
+  createUser(userCreateInput: UserCreateInput!): User!
 }
 
 type Query {
   activity(id: String!): Activity!
   activities(limit: Float = 30, page: Float = 1): [Activity!]!
+  me: User!
+}
+
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UserCreateInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }

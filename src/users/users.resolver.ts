@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { CurrentUser } from '../decorators/current.user';
+import { UserCreateInput } from './dto/user.create.inputs';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -16,6 +17,11 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   me(@CurrentUser() user: User) {
     return this.usersService.findOneById(user.id);
+  }
+
+  @Mutation(returns => User)
+  async createUser(@Args('userCreateInput') userCreateInput: UserCreateInput): Promise<User> {
+    return await this.usersService.create(userCreateInput);
   }
 
 }
