@@ -1,9 +1,10 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ActivityCreateInput } from './dto/activity.create.input';
 import { ActivityUpdateInput } from './dto/activity.update.input';
 import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
+import { GqlAuthGuard } from '../auth/gql-auth.guard';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -30,11 +31,13 @@ export class ActivitiesResolver {
   }
 
   @Mutation(returns => Activity)
+  @UseGuards(GqlAuthGuard)
   async createActivity(@Args('activityCreateInput') activityCreateInput: ActivityCreateInput): Promise<Activity> {
     return await this.activitiesService.create(activityCreateInput);
   }
 
   @Mutation(returns => Activity)
+  @UseGuards(GqlAuthGuard)
   async updateActivity(
     @Args('id') id: string,
     @Args('activityUpdateInput') activityUpdateInput: ActivityUpdateInput
@@ -43,6 +46,7 @@ export class ActivitiesResolver {
   }  
 
   @Mutation(returns => Boolean)
+  @UseGuards(GqlAuthGuard)
   async deleteActivity(@Args('id') id: string) {
     return this.activitiesService.delete(id);
   }
