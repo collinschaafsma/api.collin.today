@@ -31,17 +31,58 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Integration {
+  id: ID!
+  key: String!
+  userId: String!
+  accessToken: String!
+  refreshToken: String!
+  authorizeUrl: String!
+  accessTokenUrl: String!
+  clientId: String!
+  secret: String!
+  accessTokenExpiresAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input IntegrationCreateInput {
+  key: String!
+  accessToken: String!
+  refreshToken: String!
+  authorizeUrl: String!
+  accessTokenUrl: String!
+  clientId: String!
+  secret: String!
+  accessTokenExpiresAt: DateTime!
+}
+
+input IntegrationUpdateInput {
+  key: String!
+  accessToken: String!
+  refreshToken: String!
+  authorizeUrl: String!
+  accessTokenUrl: String!
+  clientId: String!
+  secret: String!
+  accessTokenExpiresAt: DateTime!
+}
+
 type Mutation {
   createActivity(activityCreateInput: ActivityCreateInput!): Activity!
   updateActivity(activityUpdateInput: ActivityUpdateInput!, id: String!): Activity!
   deleteActivity(id: String!): Boolean!
   createUser(userCreateInput: UserCreateInput!): User!
+  createIntegration(integrationCreateInput: IntegrationCreateInput!): Integration!
+  updateIntegration(integrationUpdateInput: IntegrationUpdateInput!, id: String!): Integration!
+  deleteIntegration(id: String!): Boolean!
 }
 
 type Query {
   activity(id: String!): Activity!
   activities(limit: Float = 30, page: Float = 1): [Activity!]!
   me: User!
+  integrationByKey(key: String!): Integration!
 }
 
 type User {

@@ -8,6 +8,7 @@ import { ActivitiesModule } from './activities/activities.module';
 import * as ormconfig from './db/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { IntegrationsModule } from './integrations/integrations.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UsersModule } from './users/users.module';
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       context: ({ req }) => ({ req }),
     }),
+    IntegrationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
