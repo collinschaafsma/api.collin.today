@@ -33,4 +33,9 @@ export class IntegrationsService {
   async delete(id: string): Promise<DeleteResult> {
     return await this.integrationsRepository.delete(id);
   }
+
+  async queStravaActivityFetch(stravaActivityId: string): Promise<boolean> {
+    //TODO: Add to Que
+    return true;
+  }
 }
