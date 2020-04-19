@@ -11,10 +11,12 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Entity
+  Entity,
+  OneToOne
 } from 'typeorm';
 import { UUID } from '../types/global';
 import { ActivityType } from './dto/activities.types';
+import { StravaActivity } from './strava-activity.entity';
 
 @ObjectType()
 @Entity({ name: 'activities' })
@@ -61,4 +63,8 @@ export class Activity {
   @IsNotEmpty()
   @IsDateString()
   public updatedAt!: Date;
+
+  @OneToOne(type => StravaActivity, stravaActivity => stravaActivity.activity)
+  stravaActivity: StravaActivity;
+
 }
