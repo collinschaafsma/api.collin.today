@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { Integration } from './integration.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
 import { IntegrationCreateInput } from './dto/integration.create.inputs';
 import { User } from '../users/user.entity';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 @Injectable()
 export class IntegrationsService {
   constructor(
     @InjectRepository(Integration)
     private integrationsRepository: Repository<Integration>,
+
+    @Inject(HttpService)
+    private readonly httpService: HttpService,
   ) {}
 
   async create(data: IntegrationCreateInput, user: User): Promise<Integration> {
@@ -34,8 +38,29 @@ export class IntegrationsService {
     return await this.integrationsRepository.delete(id);
   }
 
-  async queStravaActivityFetch(stravaActivityId: string): Promise<boolean> {
-    //TODO: Add to Que
+  //TODO: Move this into a que someday
+  async stravaActivityFetch(stravaActivityId: string): Promise<boolean> {
+    const accessToken = await this.accessTokenByIntegrationKey('strava');
+    console.log(accessToken);
+    console.log(stravaActivityId);
     return true;
+  }
+
+  private async accessTokenByIntegrationKey(key: string): Promise<string> {
+    const integration = await this.findOneByKey(key);
+    const now = new Date(Date.now());
+
+    if(integration.accessTokenExpiresAt < now) {
+      // The access token has expired
+
+      
+
+
+
+      return "needs update";
+    }
+
+    //The current access token is still valid
+    return integration.accessToken;
   }
 }
