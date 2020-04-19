@@ -37,6 +37,7 @@ export class IntegrationsResolver {
   }
 
   @Query(returns => Integration)
+  @UseGuards(GqlAuthGuard)
   async integrationByKey(@Args('key') key: string): Promise<Integration> {
     const activity = await this.integrationsService.findOneByKey(key);
     if (!activity) {
