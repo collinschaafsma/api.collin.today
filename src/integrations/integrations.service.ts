@@ -69,8 +69,9 @@ export class IntegrationsService {
     activity.publishAt = response.data['start_date'];
     activity.type = ActivityType.STRAVA;
 
-    //this.activityRepository.save(activity);
+    //activity = await this.activityRepository.save(activity);
 
+    stravaActivity.activity = activity;
     stravaActivity.averageCadence = response.data['average_cadence'];
     stravaActivity.averageHeartRate = response.data['average_heartrate'];
     stravaActivity.averageSpeed = response.data['average_speed'];
