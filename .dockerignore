@@ -3,7 +3,7 @@
 
 # Package management
 !package.json
-!package.lock
+!yarn.lock
 
 # src and test folders
 !src/
