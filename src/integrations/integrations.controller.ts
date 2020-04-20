@@ -12,7 +12,7 @@ export class IntegrationsController {
   async fetchStravaActivity(@Body() stravaWebhookInput: StravaWebhookInput) {
     if(stravaWebhookInput.aspect_type === 'create' 
       && stravaWebhookInput.object_type === 'activity') {
-        return this.integrationsService.stravaActivityFetch(stravaWebhookInput.object_id.toString());
+        return await this.integrationsService.stravaActivityFetch(stravaWebhookInput.object_id.toString());
     }
   }
 
