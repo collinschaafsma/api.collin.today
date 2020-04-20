@@ -1,10 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   IsUUID,
-  IsEnum,
   IsNotEmpty,
   IsString,
   IsDateString,
+  IsEmail,
 } from 'class-validator';
 import {
   Column,
@@ -12,15 +12,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Entity,
-  OneToOne
+  BeforeInsert
 } from 'typeorm';
 import { UUID } from '../types/global';
-import { ActivityType } from './dto/activities.types';
-import { StravaActivity } from './strava-activity.entity';
+import * as argon2 from 'argon2';
 
 @ObjectType()
-@Entity({ name: 'activities' })
-export class Activity {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn('uuid')
   @Field(/* istanbul ignore next */ (_type) => ID)  
   @IsUUID()
@@ -30,27 +29,25 @@ export class Activity {
   @Field()
   @IsNotEmpty()
   @IsString()
-  public title!: string;
+  public firstName!: string;
 
   @Column()
-  @Field({ nullable: true })
-  @IsString()
-  public description?: string;
-
-  @Column({
-    type: 'enum',
-    enum: ActivityType,
-    default: ActivityType.OTHER,
-  })
-  @Field()
-  @IsEnum(ActivityType)
-  public type!: ActivityType;
-
-  @Column('timestamp')
   @Field()
   @IsNotEmpty()
-  @IsDateString()
-  public publishAt!: Date;
+  @IsString()
+  public lastName!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsEmail()
+  public email!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public password!: string;
 
   @CreateDateColumn()
   @Field()
@@ -64,7 +61,8 @@ export class Activity {
   @IsDateString()
   public updatedAt!: Date;
 
-  @OneToOne(type => StravaActivity, stravaActivity => stravaActivity.activity)
-  stravaActivity: StravaActivity;
-
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
 }

@@ -1,9 +1,13 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { NewActivityInput } from './dto/new-activity.input';
-import { ActivitiesArgs } from './dto/activities.args';
+import { ActivityCreateInput } from './dto/activity.create.input';
+import { ActivityUpdateInput } from './dto/activity.update.input';
 import { Activity } from './activity.entity';
 import { ActivitiesService } from './activities.service';
+import { GqlAuthGuard } from '../auth/gql-auth.guard';
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 
 @Resolver(of => Activity)
 export class ActivitiesResolver {
@@ -19,20 +23,31 @@ export class ActivitiesResolver {
   }
 
   @Query(returns => [Activity])
-  activities(@Args() activitiesArgs: ActivitiesArgs): Promise<Activity[]> {
-    return this.activitiesService.findAll(activitiesArgs);
+  async activities(
+    @Args('page', { nullable: true, defaultValue: 1 }) page?: number,
+    @Args('limit', { nullable: true, defaultValue: 30}) limit?: number
+  ): Promise<Activity[]> {
+    return await this.activitiesService.findAll(page, limit);
   }
 
   @Mutation(returns => Activity)
-  async addActivity(
-    @Args('newActivityData') newActivityData: NewActivityInput,
-  ): Promise<Activity> {
-    const activity = await this.activitiesService.create(newActivityData);
-    return activity;
+  @UseGuards(GqlAuthGuard)
+  async createActivity(@Args('activityCreateInput') activityCreateInput: ActivityCreateInput): Promise<Activity> {
+    return await this.activitiesService.create(activityCreateInput);
   }
 
+  @Mutation(returns => Activity)
+  @UseGuards(GqlAuthGuard)
+  async updateActivity(
+    @Args('id') id: string,
+    @Args('activityUpdateInput') activityUpdateInput: ActivityUpdateInput
+  ): Promise<Activity> {
+    return await this.activitiesService.update(id, activityUpdateInput);
+  }  
+
   @Mutation(returns => Boolean)
-  async removeActivity(@Args('id') id: string) {
-    return this.activitiesService.remove(id);
+  @UseGuards(GqlAuthGuard)
+  async deleteActivity(@Args('id') id: string) {
+    return this.activitiesService.delete(id);
   }
 }

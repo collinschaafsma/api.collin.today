@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   IsUUID,
-  IsEnum,
   IsNotEmpty,
   IsString,
   IsDateString,
@@ -12,15 +11,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Entity,
-  OneToOne
 } from 'typeorm';
 import { UUID } from '../types/global';
-import { ActivityType } from './dto/activities.types';
-import { StravaActivity } from './strava-activity.entity';
 
 @ObjectType()
-@Entity({ name: 'activities' })
-export class Activity {
+@Entity({ name: 'integrations' })
+export class Integration {
   @PrimaryGeneratedColumn('uuid')
   @Field(/* istanbul ignore next */ (_type) => ID)  
   @IsUUID()
@@ -30,27 +26,55 @@ export class Activity {
   @Field()
   @IsNotEmpty()
   @IsString()
-  public title!: string;
+  public key!: string;
 
   @Column()
-  @Field({ nullable: true })
-  @IsString()
-  public description?: string;
-
-  @Column({
-    type: 'enum',
-    enum: ActivityType,
-    default: ActivityType.OTHER,
-  })
   @Field()
-  @IsEnum(ActivityType)
-  public type!: ActivityType;
+  @IsNotEmpty()
+  @IsUUID()
+  public userId!: UUID;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public accessToken!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public refreshToken!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public authorizeUrl!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public accessTokenUrl!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public clientId!: string;
+
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  public secret!: string;
 
   @Column('timestamp')
   @Field()
   @IsNotEmpty()
   @IsDateString()
-  public publishAt!: Date;
+  public accessTokenExpiresAt!: Date;
 
   @CreateDateColumn()
   @Field()
@@ -63,8 +87,4 @@ export class Activity {
   @IsNotEmpty()
   @IsDateString()
   public updatedAt!: Date;
-
-  @OneToOne(type => StravaActivity, stravaActivity => stravaActivity.activity)
-  stravaActivity: StravaActivity;
-
 }
