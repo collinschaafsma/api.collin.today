@@ -25,7 +25,7 @@ const config: ConnectionOptions = {
 
   // Run migrations automatically,
   // you can disable this if you prefer running migration manually.
-  migrationsRun: false,
+  migrationsRun: true,
 
   logging,
   
