@@ -59,10 +59,9 @@ export class StravaActivity {
   public stravaType!: string;
 
   @Column()
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  @IsNotEmpty()
-  public externalId!: string;
+  public externalId?: string;
 
   @Column('timestamp')
   @Field()
