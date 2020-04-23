@@ -61,7 +61,7 @@ export class IntegrationsService {
 
     const response = await this.httpService.get(url, config).toPromise();
 
-    const activity: Activity = this.activityRepository.create();
+    let activity: Activity = this.activityRepository.create();
     const stravaActivity: StravaActivity = this.stravaActivityRepository.create();
 
     activity.title = response.data['name'];
@@ -69,7 +69,7 @@ export class IntegrationsService {
     activity.publishAt = response.data['start_date'];
     activity.type = ActivityType.STRAVA;
 
-    //activity = await this.activityRepository.save(activity);
+    activity = await this.activityRepository.save(activity);
 
     stravaActivity.activity = activity;
     stravaActivity.averageCadence = response.data['average_cadence'];
@@ -94,6 +94,8 @@ export class IntegrationsService {
     stravaActivity.sufferScore = response.data['suffer_score'];
     stravaActivity.totalElevationGain = response.data['total_elevation_gain'];
     stravaActivity.weightedAverageWatts = response.data['weighted_average_watts'];
+
+    await this.stravaActivityRepository.save(stravaActivity);
 
     return activity.title;
   }

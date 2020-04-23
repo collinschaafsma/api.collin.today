@@ -101,12 +101,12 @@ export class CreateStravaActivity1587528148631 implements MigrationInterface {
                 },
                 {
                   name: 'averageHeartRate',
-                  type: 'integer',
+                  type: 'decimal',
                   isNullable: true,
                 },
                 {
                   name: 'maxHeartRate',
-                  type: 'integer',
+                  type: 'decimal',
                   isNullable: true,
                 },
                 {
