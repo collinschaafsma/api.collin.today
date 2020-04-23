@@ -16,7 +16,7 @@ export class IntegrationsController {
     }
   }
 
-  @Get('subscription/strava/callback')
+  @Get('fetch/strava/activity')
   async subscriptionStravaCallback(@Req() request: Request) {
     if(process.env.STRAVA_VERIFY_TOKEN === request.query['hub.verify_token']) {
       return { "hub.challenge": request.query['hub.challenge'] };

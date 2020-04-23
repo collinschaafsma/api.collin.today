@@ -36,7 +36,7 @@ export class CreateStravaActivity1587528148631 implements MigrationInterface {
                 },
                 {
                   name: 'totalElevationGain',
-                  type: 'integer',
+                  type: 'decimal',
                   isNullable: true,
                 },
                 {
@@ -116,7 +116,7 @@ export class CreateStravaActivity1587528148631 implements MigrationInterface {
                 },
                 {
                   name: 'calories',
-                  type: 'integer',
+                  type: 'decimal',
                   isNullable: true,
                 },
                 {
