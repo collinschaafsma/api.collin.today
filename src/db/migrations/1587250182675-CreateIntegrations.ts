@@ -23,7 +23,6 @@ export class CreateIntegrations1587250182675 implements MigrationInterface {
                 name: 'userId',
                 type: 'uuid',
                 isNullable: false,
-                isUnique: true,
               },
               {
                 name: 'accessToken',
