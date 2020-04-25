@@ -12,7 +12,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Entity,
-  OneToOne
+  OneToOne,
+  JoinColumn
 } from 'typeorm';
 import { UUID } from '../types/global';
 import { ActivityType } from './dto/activities.types';
@@ -64,7 +65,15 @@ export class Activity {
   @IsDateString()
   public updatedAt!: Date;
 
-  @OneToOne(type => StravaActivity, stravaActivity => stravaActivity.activity)
-  stravaActivity: StravaActivity;
+  @OneToOne(
+    type => StravaActivity, 
+    stravaActivity => stravaActivity.activity,
+    {
+      nullable: true,
+      eager: true,
+    },
+  )
+  @Field(type => StravaActivity, { nullable: true })
+  stravaActivity?: StravaActivity;
 
 }

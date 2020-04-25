@@ -10,6 +10,7 @@ type Activity {
   publishAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
+  stravaActivity: StravaActivity
 }
 
 input ActivityCreateInput {
@@ -83,6 +84,35 @@ type Query {
   activities(limit: Float = 30, page: Float = 1): [Activity!]!
   me: User!
   integrationByKey(key: String!): Integration!
+}
+
+type StravaActivity {
+  id: ID!
+  activityId: String!
+  distance: Float
+  movingTime: Float
+  elapsedTime: Float
+  totalElevationGain: Float
+  stravaType: String!
+  externalId: String
+  startDate: DateTime!
+  mapSummaryPolyline: String
+  mapPolyline: String
+  averageSpeed: Float
+  maxSpeed: Float
+  averageCadence: Float
+  averageWatts: Float
+  weightedAverageWatts: Float
+  maxWatts: Float
+  kilojoules: Float
+  averageHeartRate: Float
+  maxHeartRate: Float
+  sufferScore: Float
+  calories: Float
+  embedToken: String
+  deviceName: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type User {
