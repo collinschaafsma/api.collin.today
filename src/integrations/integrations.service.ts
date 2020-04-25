@@ -126,8 +126,11 @@ export class IntegrationsService {
         config
       ).toPromise();
 
+      const expiresAt = new Date(Date.now());
+      expiresAt.setSeconds(expiresAt.getSeconds() + response.data['expires_in']);
+
       integration.accessToken = response.data['access_token'];
-      integration.accessTokenExpiresAt = new Date(response.data['expires_at'] * 1000);
+      integration.accessTokenExpiresAt = expiresAt;
       integration.refreshToken = response.data['refresh_token'];
       this.integrationsRepository.save(integration);
     }
