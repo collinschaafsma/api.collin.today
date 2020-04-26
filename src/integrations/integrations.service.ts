@@ -8,6 +8,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Activity } from '../activities/activity.entity';
 import { ActivityType } from '../activities/dto/activities.types';
 import { StravaActivity } from '../activities/strava-activity.entity';
+import { stringify } from 'qs';
 
 @Injectable()
 export class IntegrationsService {
@@ -100,6 +101,32 @@ export class IntegrationsService {
     return activity.title;
   }
 
+  async ouraScoresFetch(): Promise<number> {
+    const integration = await this.initIntegrationByKey('oura');
+    // Grab last nights data
+    const now = new Date();
+    console.log(now);
+    const nowHere = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
+    nowHere.setDate(now.getDate() - 1);
+    
+    console.log(nowHere);
+    const sleepStart = nowHere.toISOString().split('T')[0];
+    console.log(sleepStart);
+    // TODO: Move this into a config variable
+    const sleepUrl = `https://api.ouraring.com/v1/sleep?start=2020-04-24&end=2020-04-24`;
+
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${integration.accessToken}`,
+      },
+    };
+
+    const response = await this.httpService.get(sleepUrl, config).toPromise();
+
+    return response.data['sleep'][0]['score'];
+  }
+
   private async initIntegrationByKey(key: string): Promise<Integration> {
     const integration = await this.findOneByKey(key);
     const now = new Date(Date.now());
@@ -107,16 +134,23 @@ export class IntegrationsService {
     if(integration.accessTokenExpiresAt < now) {
       console.log('Need a new token');
       // The access token has expired, exchange refresh token for a new one
-      const payload = {
+      let payload: any = {
         'client_id': integration.clientId,
         'client_secret': integration.secret,
         'grant_type': 'refresh_token',
         'refresh_token': integration.refreshToken,
       }
 
+      let contentType = 'application/json';
+
+      if(key === 'oura') {
+        contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+        payload = stringify(payload);
+      }
+
       const config: AxiosRequestConfig = {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': contentType,
         },
       };
 

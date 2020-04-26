@@ -21,6 +21,11 @@ export class IntegrationsController {
     if(process.env.STRAVA_VERIFY_TOKEN === request.query['hub.verify_token']) {
       return { "hub.challenge": request.query['hub.challenge'] };
     }
-  } 
+  }
+
+  @Post('fetch/oura/scores')
+  async fetchOuraScores() {
+    return await this.integrationsService.ouraScoresFetch();
+  }
 
 }
