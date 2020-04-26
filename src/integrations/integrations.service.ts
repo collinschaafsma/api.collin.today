@@ -105,15 +105,16 @@ export class IntegrationsService {
     const integration = await this.initIntegrationByKey('oura');
     // Grab last nights data
     const now = new Date();
-    console.log(now);
+
     const nowHere = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
-    nowHere.setDate(now.getDate() - 1);
     
-    console.log(nowHere);
+    nowHere.setDate(now.getDate() - 1);
+
     const sleepStart = nowHere.toISOString().split('T')[0];
-    console.log(sleepStart);
-    // TODO: Move this into a config variable
-    const sleepUrl = `https://api.ouraring.com/v1/sleep?start=2020-04-24&end=2020-04-24`;
+
+    // TODO: Move these into a config variable
+    const sleepUrl = `https://api.ouraring.com/v1/sleep?start=${sleepStart}&end=${sleepStart}`;
+    const readinessUrl = `https://api.ouraring.com/v1/readiness?start=${sleepStart}&end=${sleepStart}`;
 
     const config: AxiosRequestConfig = {
       headers: {
@@ -122,9 +123,13 @@ export class IntegrationsService {
       },
     };
 
-    const response = await this.httpService.get(sleepUrl, config).toPromise();
+    const readinessResponse = await this.httpService.get(readinessUrl, config).toPromise();
+    const sleepResponse = await this.httpService.get(sleepUrl, config).toPromise();
 
-    return response.data['sleep'][0]['score'];
+    //return sleepResponse.data['sleep'][0]['score'];
+    //return readinessResponse.data['readiness'][0]['score'];
+
+    return sleepResponse.data;
   }
 
   private async initIntegrationByKey(key: string): Promise<Integration> {
