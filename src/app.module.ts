@@ -9,6 +9,7 @@ import * as ormconfig from './db/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { IntegrationsModule } from './integrations/integrations.module';
+import { ScoresModule } from './scores/scores.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { IntegrationsModule } from './integrations/integrations.module';
       context: ({ req }) => ({ req }),
     }),
     IntegrationsModule,
+    ScoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],

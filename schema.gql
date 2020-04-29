@@ -79,11 +79,32 @@ type Mutation {
   deleteIntegration(id: String!): Boolean!
 }
 
+type OuraScore {
+  id: ID!
+  readiness: Float!
+  hrvBalance: Float!
+  previousNight: Float!
+  recoveryIndex: Float!
+  restingHr: Float!
+  sleepBalance: Float!
+  temperature: Float!
+  sleep: Float!
+  deepSleep: Float!
+  sleepDisturbances: Float!
+  sleepEfficiency: Float!
+  sleepLatency: Float!
+  sleepRem: Float!
+  publishAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   activity(id: String!): Activity!
   activities(limit: Float = 30, page: Float = 1): [Activity!]!
   me: User!
   integrationByKey(key: String!): Integration!
+  ouraScores(limit: Float = 30, page: Float = 1): [OuraScore!]!
 }
 
 type StravaActivity {
